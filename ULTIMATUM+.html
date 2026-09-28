@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimatum+ Presentation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        :root {
+            --bg: #000000;
+            --surface: #16213e;
+            --accent: #0f3460;
+            --gold: #e94560;
+            --text: #eaeaea;
+            --muted: #a0a0a0;
+            --success: #4ecca3;
+            --danger: #ff6b6b;
+            --cursor-trail-color: rgba(233, 69, 96, 0.6);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            scroll-snap-type: y mandatory;
+        }
+
+        /* --- ФОН ИЗ ЛОЛ.HTML --- */
+        .background-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at bottom, #111 0%, #000 70%);
+            overflow: hidden;
+        }
+
+        .nebula {
+            position: absolute;
+            width: 150%; height: 150%;
+            top: -25%; left: -25%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(233, 69, 96, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(78, 204, 163, 0.05) 0%, transparent 40%);
+            filter: blur(60px);
+            animation: nebulaMove 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes nebulaMove {
+            from { transform: translate(0, 0) rotate(0deg); }
+            to { transform: translate(-5%, -5%) rotate(5deg); }
+        }
+
+        .stars {
+            position: absolute;
+            width: 1px; height: 1px;
+            background: transparent;
+        }
+
+        .shooting-star {
+            position: absolute;
+            left: 50%; top: 50%;
+            height: 2px;
+            background: linear-gradient(-45deg, var(--gold), rgba(0, 0, 255, 0));
+            filter: drop-shadow(0 0 6px var(--gold));
+            animation: tail 3s ease-in-out infinite, shooting 3s ease-in-out infinite;
+            opacity: 0;
+        }
+
+        @keyframes tail {
+            0% { width: 0; }
+            30% { width: 100px; }
+            100% { width: 0; }
+        }
+
+        @keyframes shooting {
+            0% { transform: translateX(0) translateY(0) rotate(25deg); opacity: 1; }
+            100% { transform: translateX(-800px) translateY(400px) rotate(25deg); opacity: 0; }
+        }
+
+        .shooting-star:nth-child(1) { top: 0; right: 0; animation-delay: 0s; }
+        .shooting-star:nth-child(2) { top: 100px; right: 200px; animation-delay: 1.5s; }
+        .shooting-star:nth-child(3) { top: 300px; right: 0; animation-delay: 4s; }
+
+        /* --- КУРСОР --- */
+        .cursor-trail {
+            position: fixed; width: 10px; height: 10px;
+            background-color: var(--cursor-trail-color);
+            border-radius: 50%; pointer-events: none; z-index: 9999;
+            transition: transform 0.1s ease-out, opacity 0.5s ease-out;
+            opacity: 0; transform: translate(-50%, -50%);
+        }
+
+        /* --- СТИЛИ ПРЕЗЕНТАЦИИ --- */
+        .slide {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            scroll-snap-align: start;
+            position: relative;
+            background: transparent; /* Сделано прозрачным для видимости фона */
+        }
+
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            color: var(--gold);
+            margin-bottom: 20px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        p.desc {
+            font-size: 1.2rem;
+            color: var(--muted);
+            max-width: 800px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .mockup {
+            background: rgba(22, 33, 62, 0.8);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            box-shadow: 0 0 40px rgba(0,0,0,0.7);
+            width: 100%;
+            max-width: 850px;
+            overflow: hidden;
+            animation: fadeInUp 1s;
+        }
+
+        .m-head {
+            background: #1a1a2e;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--accent);
+        }
+
+        .m-dots { display: flex; gap: 6px; margin-right: 15px; }
+        .m-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+        .m-body { padding: 30px; position: relative; }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; width: 100%; max-width: 1000px; }
+        .stat-card { background: var(--surface); padding: 20px; border-radius: 10px; border-top: 4px solid var(--gold); text-align: center; }
+        .stat-num { display: block; font-size: 2.5rem; font-weight: bold; color: var(--gold); }
+
+        .code-block { background: #000; padding: 20px; border-radius: 5px; font-family: 'Courier New', monospace; font-size: 0.9rem; color: #4ecca3; overflow-x: auto; }
+
+        .nav-dots {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .nav-dot { width: 12px; height: 12px; background: rgba(255,255,255,0.2); border-radius: 50%; cursor: pointer; transition: 0.3s; }
+        .nav-dot.active { background: var(--gold); transform: scale(1.4); }
+
+        .game-ui-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .score-box { background: var(--bg); padding: 15px 30px; border-radius: 8px; text-align: center; min-width: 150px; }
+        .score-val { font-size: 2rem; font-weight: bold; color: var(--gold); }
+        .btn-row { display: flex; gap: 8px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
+        .btn { background: var(--accent); border: none; color: white; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-family: 'Orbitron'; transition: 0.2s; }
+        .btn:hover { background: var(--gold); }
+
+        .footer-link { color: var(--gold); text-decoration: none; border-bottom: 1px dashed transparent; transition: 0.3s; }
+        .footer-link:hover { border-bottom: 1px dashed var(--gold); }
+        .support-link { color: var(--success); text-decoration: none; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="background-container">
+        <div class="nebula"></div>
+        <div class="stars" id="starsLayer"></div>
+        <div class="shooting-star"></div>
+        <div class="shooting-star"></div>
+        <div class="shooting-star"></div>
+    </div>
+
+    <div class="cursor-trail"></div>
+    <div class="cursor-trail"></div>
+    <div class="cursor-trail"></div>
+    <div class="cursor-trail"></div>
+    <div class="cursor-trail"></div>
+
+    <div class="nav-dots">
+        <div class="nav-dot active" onclick="scrollToSlide(0)"></div>
+        <div class="nav-dot" onclick="scrollToSlide(1)"></div>
+        <div class="nav-dot" onclick="scrollToSlide(2)"></div>
+        <div class="nav-dot" onclick="scrollToSlide(3)"></div>
+        <div class="nav-dot" onclick="scrollToSlide(4)"></div>
+        <div class="nav-dot" onclick="scrollToSlide(5)"></div>
+        <div class="nav-dot" onclick="scrollToSlide(6)"></div>
+        <div class="nav-dot" onclick="scrollToSlide(7)"></div>
+        <div class="nav-dot" onclick="scrollToSlide(8)"></div>
+        <div class="nav-dot" onclick="scrollToSlide(9)"></div>
+    </div>
+
+    <section class="slide">
+        <h1 class="animate__animated animate__zoomIn" style="font-family: 'Orbitron'; font-size: 5rem; color: var(--gold); text-shadow: 0 0 30px var(--gold);">ULTIMATUM+</h1>
+        <p class="animate__animated animate__fadeInUp animate__delay-1s" style="font-size: 1.5rem; letter-spacing: 5px;">TACTICAL DUEL SYSTEM</p>
+        <div style="margin-top: 50px; color: var(--muted);">Листайте вниз для начала презентации</div>
+    </section>
+
+    <section class="slide">
+        <h2>01. Концепция</h2>
+        <p class="desc">Ultimatum+ — это психологическая игра на двоих, где ваша главная задача — предугадать жадность противника. Баланс между накоплением и риском штрафа.</p>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-num">2</span>
+                <span>Игрока</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-num">LAN</span>
+                <span>Сетевой режим</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-num">AI</span>
+                <span>Умный бот</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide">
+        <h2>02. Интерфейс Меню</h2>
+        <div class="mockup">
+            <div class="m-head"><div class="m-dots"><div class="m-dot" style="background:#ff5f56"></div><div class="m-dot" style="background:#ffbd2e"></div><div class="m-dot" style="background:#27c93f"></div></div> <span style="font-size: 12px; color: var(--muted)">Ultimatum Launcher</span></div>
+            <div class="m-body" style="text-align: center;">
+                <h3 style="color: var(--gold); font-family: 'Orbitron'; font-size: 2rem; margin-bottom: 30px;">ULTIMATUM+</h3>
+                <div style="display: flex; flex-direction: column; gap: 10px; max-width: 300px; margin: 0 auto;">
+                    <button class="btn" style="width: 100%; border: 1px solid var(--gold);">SOLO VS AI</button>
+                    <button class="btn" style="width: 100%;">DUO (HOTSEAT)</button>
+                    <button class="btn" style="width: 100%;">LAN - HOST</button>
+                    <button class="btn" style="width: 100%;">LAN - JOIN</button>
+                </div>
+                <div style="margin-top: 20px; font-size: 0.8rem; color: var(--muted);">IP: 192.168.1.45 | Port: 55555</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide">
+        <h2>03. Механика: Размен</h2>
+        <p class="desc">Если сумма ставок (Игрок 1 + Игрок 2) меньше порога (Threshold), каждый получает свои очки.</p>
+        <div class="mockup" style="max-width: 600px;">
+            <div class="m-body" style="background: var(--bg); text-align: center;">
+                <div style="font-size: 1.5rem; margin-bottom: 20px;">Ставка 1: <span style="color:var(--success)">4</span> | Ставка 2: <span style="color:var(--success)">3</span></div>
+                <div style="padding: 15px; border: 2px dashed var(--success); color: var(--success);">
+                    Сумма 7 < 10 (Порог)<br>
+                    <strong>РЕЗУЛЬТАТ: ОБА ПОЛУЧАЮТ ОЧКИ</strong>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide">
+        <h2>04. Механика: ОБМЕН!</h2>
+        <p class="desc">Уникальная фишка: если сумма равна порогу, игроки меняются всем своим счетом. Это шанс для проигрывающего!</p>
+        <div class="mockup" style="max-width: 600px; border-color: var(--gold);">
+            <div class="m-body" style="background: var(--bg); text-align: center;">
+                <div style="font-size: 1.5rem; margin-bottom: 20px;">Ставка 1: <span style="color:var(--gold)">5</span> | Ставка 2: <span style="color:var(--gold)">5</span></div>
+                <div style="padding: 15px; background: var(--gold); color: white;">
+                    Сумма 10 == 10 (Порог)<br>
+                    <strong>ULTIMATUM! ОБМЕН ОЧКАМИ</strong>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide">
+        <h2>05. Механика: Штраф</h2>
+        <p class="desc">Жадность наказуема. Если сумма выше порога — оба теряют свои ставки из общего счета.</p>
+        <div class="mockup" style="max-width: 600px; border-color: var(--danger);">
+            <div class="m-body" style="background: var(--bg); text-align: center;">
+                <div style="font-size: 1.5rem; margin-bottom: 20px;">Ставка 1: <span style="color:var(--danger)">8</span> | Ставка 2: <span style="color:var(--danger)">7</span></div>
+                <div style="padding: 15px; border: 2px solid var(--danger); color: var(--danger);">
+                    Сумма 15 > 10 (Порог)<br>
+                    <strong>ШТРАФ! ОБА ТЕРЯЮТ ОЧКИ</strong>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide">
+        <h2>06. Игровой Экран</h2>
+        <div class="mockup">
+            <div class="m-head"> <span style="color: var(--gold); font-weight: bold;">Ultimatum+ Session</span></div>
+            <div class="m-body">
+                <div class="game-ui-header">
+                    <div class="score-box"><div>ВЫ</div><div class="score-val">145</div></div>
+                    <div style="font-family: 'Orbitron'; font-size: 1.2rem;">ROUND 12</div>
+                    <div class="score-box"><div>AI</div><div class="score-val" style="color: var(--success);">110</div></div>
+                </div>
+                <div style="text-align: center; margin: 20px 0;">Выберите ставку (от 1 до 10):</div>
+                <div class="btn-row">
+                    <button class="btn">1</button><button class="btn">2</button><button class="btn">3</button>
+                    <button class="btn" style="background: var(--gold);">4</button><button class="btn">5</button>
+                    <button class="btn">6</button><button class="btn">7</button>
+                </div>
+                <div style="margin-top: 30px; border-top: 1px solid var(--accent); padding-top: 15px;">
+                    <div style="font-family: monospace; font-size: 0.8rem; color: var(--muted);">
+                        > Round 11: 4 vs 5 - Gain (+4, +5)<br>
+                        > Round 10: 10 vs 1 - Penalty! Sum > 10
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide">
+        <h2>07. Технологический стек</h2>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 900px;">
+            <div class="code-block">
+# Сетевое ядро
+import socket
+import threading
+
+def start_host(port):
+    s = socket.socket()
+    s.bind(("", port))
+    s.listen(1)
+            </div>
+            <div class="code-block" style="color: #e94560">
+# Игровая логика
+if total < threshold:
+    p1_score += move1
+    p2_score += move2
+elif total == threshold:
+    p1_score, p2_score = p2_score, p1_score
+            </div>
+        </div>
+    </section>
+
+    <section class="slide">
+        <h2>08. Сетевая игра</h2>
+        <p class="desc">Игра поддерживает полноценный LAN режим. Вы можете играть с другом, находясь в одной Wi-Fi сети.</p>
+        <div class="mockup" style="max-width: 500px;">
+            <div class="m-body" style="text-align: center;">
+                <h4 style="margin-bottom: 20px;">Подключение</h4>
+                <input type="text" value="192.168.1.104" disabled style="background: var(--bg); border: 1px solid var(--accent); color: white; padding: 10px; text-align: center; width: 80%;">
+                <button class="btn" style="margin-top: 20px; width: 80%;">CONNECT</button>
+                <div style="margin-top: 15px; font-size: 0.8rem; color: var(--success);">Статус: Соединение установлено!</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide">
+        <h2>09. Результат</h2>
+        <div class="mockup" style="max-width: 400px; border-color: var(--success); margin-bottom: 30px;">
+            <div class="m-body" style="text-align: center;">
+                <div style="font-size: 3rem;">🏆</div>
+                <h3 style="color: var(--success); margin: 15px 0;">ПОБЕДА!</h3>
+                <p>Вы набрали: 215 очков</p>
+                <p>AI набрал: 180 очков</p>
+                <button class="btn" style="margin-top: 20px;" onclick="scrollToSlide(0)">ИГРАТЬ СНОВА</button>
+            </div>
+        </div>
+        
+        <div style="text-align: center; background: rgba(0,0,0,0.5); padding: 20px; border-radius: 10px; width: 100%; max-width: 500px; backdrop-filter: blur(5px);">
+            <p style="font-size: 1.1rem; margin-bottom: 10px;">
+                🚀 Скачать: <a href="http://f1254575.xsph.ru" class="footer-link" target="_blank">f1254575.xsph.ru</a>
+            </p>
+            <p style="font-size: 0.9rem; color: var(--muted);">
+                Тех. поддержка: <a href="mailto:griffvova7@gmail.com" class="support-link">griffvova7@gmail.com</a>
+            </p>
+            <p style="margin-top: 15px; color: rgba(255,255,255,0.3); font-size: 0.8rem;">Спасибо за внимание!</p>
+        </div>
+    </section>
+
+    <script>
+        // Звезды
+        const starsLayer = document.getElementById('starsLayer');
+        let boxShadow = "";
+        for(let i = 0; i < 200; i++) {
+            boxShadow += `${Math.random() * 2000}px ${Math.random() * 2000}px #fff${i < 199 ? ',' : ''}`;
+        }
+        starsLayer.style.boxShadow = boxShadow;
+
+        // Хвост курсора
+        const trails = document.querySelectorAll('.cursor-trail');
+        const m = { x: 0, y: 0 };
+        const stats = Array.from({ length: trails.length }, () => ({ x: 0, y: 0 }));
+
+        window.addEventListener('mousemove', (e) => {
+            m.x = e.clientX;
+            m.y = e.clientY;
+        });
+
+        function animateCursor() {
+            stats[0].x += (m.x - stats[0].x) * 0.3;
+            stats[0].y += (m.y - stats[0].y) * 0.3;
+            
+            for (let i = 0; i < trails.length; i++) {
+                if (i > 0) {
+                    stats[i].x += (stats[i-1].x - stats[i].x) * 0.3;
+                    stats[i].y += (stats[i-1].y - stats[i].y) * 0.3;
+                }
+                trails[i].style.transform = `translate(${stats[i].x}px, ${stats[i].y}px) translate(-50%, -50%) scale(${1 - i*0.15})`;
+                trails[i].style.opacity = 1 - i*0.2;
+            }
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Навигация
+        function scrollToSlide(index) {
+            const slides = document.querySelectorAll('.slide');
+            slides[index].scrollIntoView({ behavior: 'smooth' });
+            updateDots(index);
+        }
+
+        function updateDots(index) {
+            const dots = document.querySelectorAll('.nav-dot');
+            dots.forEach(dot => dot.classList.remove('active'));
+            if(dots[index]) dots[index].classList.add('active');
+        }
+
+        window.addEventListener('scroll', () => {
+            const slides = document.querySelectorAll('.slide');
+            let current = 0;
+            slides.forEach((slide, index) => {
+                const rect = slide.getBoundingClientRect();
+                if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
+                    current = index;
+                }
+            });
+            updateDots(current);
+        });
+    </script>
+</body>
+</html>
